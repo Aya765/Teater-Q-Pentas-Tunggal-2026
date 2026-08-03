@@ -2,7 +2,7 @@
 // TEATER Q SCANNER
 //======================================
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyR3Xikacz3GhF4rDk5DDyOm7lU4tbzo0yHayq3GYTrY1JWWbKuRSIYcMOyyLtLELF-/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzr1zpetaG6kr95ISQhA8t1fXVSAXp209VzNwxvZDH-k83tpONTRNNc4WPC3jCA1xlk/exec";
 
 const reader = document.getElementById("reader");
 const hasil = document.getElementById("hasil");
