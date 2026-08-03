@@ -74,24 +74,38 @@ async function cariTiket(ticketID){
 
         const response = await fetch(API_URL,{
 
-            method:"POST",
+    method:"POST",
 
-            body:JSON.stringify({
+    headers:{
+        "Content-Type":"application/json"
+    },
 
-                action:"cari",
+    body:JSON.stringify({
 
-                ticketID:ticketID
+        action:"cari",
 
-            })
+        ticketID:ticketID
 
-        });
+    })
+
+});
 
         const data = await response.json();
 
-        console.log(data);
+if(!data.found){
+
+    hasil.innerHTML = "❌ Tiket tidak ditemukan";
+
+    scanLagi.style.display = "inline-block";
+
+    return;
+
+}
+
+tampilkanData(data);
 
     }
-
+        
     catch(err){
 
         hasil.innerHTML =
@@ -101,5 +115,110 @@ async function cariTiket(ticketID){
 
 }
 
-mulaiScanner();
 
+//======================================
+// TAMPILKAN DATA TIKET
+//======================================
+
+function tampilkanData(data){
+
+    hasil.innerHTML = `
+<b>Nama</b><br>${data.nama}<br><br>
+
+<b>ID Tiket</b><br>${data.ticketID}<br><br>
+
+<b>Jumlah Tiket</b><br>${data.jumlah}<br><br>
+
+<b>Sudah Masuk</b><br>${data.masuk}<br><br>
+
+<b>Sisa Tiket</b><br>${data.sisa}<br><br>
+
+<button id="btnCheckin">
+✅ CHECK IN
+</button>
+`;
+
+    document
+        .getElementById("btnCheckin")
+        .onclick = () => prosesCheckIn(data.ticketID);
+
+}
+
+//======================================
+// PROSES CHECK IN
+//======================================
+
+async function prosesCheckIn(ticketID){
+
+    hasil.innerHTML = "Memproses check-in...";
+
+    try{
+
+       const response = await fetch(API_URL,{
+    method:"POST",
+
+    headers:{
+        "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+        action:"checkin",
+        ticketID:ticketID
+    })
+});
+
+        const data = await response.json();
+
+        if(!data.success){
+
+            hasil.innerHTML = data.message;
+
+            scanLagi.style.display = "inline-block";
+
+            return;
+
+        }
+
+        hasil.innerHTML = `
+${data.message}
+
+<br><br>
+
+<b>${data.nama}</b>
+
+<br>
+
+Sudah Masuk : ${data.masuk}
+
+<br>
+
+Sisa : ${data.sisa}
+`;
+
+        scanLagi.style.display = "inline-block";
+
+    }
+
+    catch(err){
+
+        hasil.innerHTML = "❌ Gagal menghubungi server";
+
+        scanLagi.style.display = "inline-block";
+
+    }
+
+}
+
+//======================================
+// SCAN LAGI
+//======================================
+
+scanLagi.onclick = ()=>{
+
+    lastScan = "";
+
+    mulaiScanner();
+
+};
+
+mulaiScanner();
