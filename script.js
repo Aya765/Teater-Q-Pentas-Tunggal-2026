@@ -76,10 +76,6 @@ async function cariTiket(ticketID){
 
     method:"POST",
 
-    headers:{
-        "Content-Type":"application/json"
-    },
-
     body:JSON.stringify({
 
         action:"cari",
@@ -156,10 +152,6 @@ async function prosesCheckIn(ticketID){
 
        const response = await fetch(API_URL,{
     method:"POST",
-
-    headers:{
-        "Content-Type":"application/json"
-    },
 
     body:JSON.stringify({
         action:"checkin",
